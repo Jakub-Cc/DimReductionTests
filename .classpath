@@ -23,6 +23,6 @@
 	<classpathentry kind="lib" path="lib/commons-math-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/javaml-0.1.7.jar"/>
 	<classpathentry kind="lib" path="lib/libsvm.jar"/>
-	<classpathentry kind="lib" path="lib/weka.jar"/>
+	<classpathentry kind="lib" path="lib/weka.jar" sourcepath="C:/Users/JC-pc/git/weka-3.8-master.zip"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
