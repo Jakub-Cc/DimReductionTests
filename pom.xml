@@ -31,5 +31,20 @@
   		<groupId>com.edwardraff</groupId>
   		<artifactId>JSAT</artifactId>
   	</dependency>
+  	<dependency>
+  		<groupId>com.blogspot.ostas</groupId>
+  		<artifactId>Jama</artifactId>
+  		<version>1.0.2</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>nz.ac.waikato.cms.moa</groupId>
+  		<artifactId>weka-package</artifactId>
+  		<version>2018.6.0</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>com.github.fommil.netlib</groupId>
+  		<artifactId>core</artifactId>
+  		<version>1.1.2</version>
+  	</dependency>
   </dependencies>
 </project>

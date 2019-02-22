@@ -12,7 +12,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/commons-math3-3.6.jar"/>
-	<classpathentry kind="lib" path="lib/Jama-1.0.3.jar"/>
 	<classpathentry kind="lib" path="lib/mdsj.jar"/>
 	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
 		<attributes>
@@ -21,8 +20,7 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/ajt-2.9.jar"/>
 	<classpathentry kind="lib" path="lib/commons-math-1.2.jar"/>
-	<classpathentry kind="lib" path="lib/javaml-0.1.7.jar"/>
+	<classpathentry kind="lib" path="lib/javaml-0.1.7.jar" sourcepath="C:/Users/jcankudi/Downloads/javaml-0.1.7/javaml-0.1.7-src.zip"/>
 	<classpathentry kind="lib" path="lib/libsvm.jar"/>
-	<classpathentry kind="lib" path="lib/weka.jar" sourcepath="C:/Users/JC-pc/git/weka-3.8-master.zip"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
