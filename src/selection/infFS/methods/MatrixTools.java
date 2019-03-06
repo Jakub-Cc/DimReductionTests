@@ -3,6 +3,7 @@ package selection.infFS.methods;
 import java.util.List;
 
 import core.Function;
+import core.Function2p;
 import core.SimpleMatrix;
 
 public class MatrixTools {
@@ -15,7 +16,19 @@ public class MatrixTools {
 
 		System.out.println(simpleMatrix);
 
-		double[] sdev = standardDeviation(simpleMatrix.matrix);
+		double[] sdev = standardDeviation(simpleMatrix.matrix, false);
+
+		double min = min(simpleMatrix.matrix);
+		System.out.println(min);
+
+		double max = max(simpleMatrix.matrix);
+		System.out.println(max);
+
+		transformValues(simpleMatrix.matrix, e -> e - min);
+		System.out.println(simpleMatrix.toString());
+
+		transformValues(simpleMatrix.matrix, e -> e / max);
+		System.out.println(simpleMatrix.toString());
 
 		for (double d : sdev)
 			System.out.print(" " + d);
@@ -32,6 +45,57 @@ public class MatrixTools {
 		return correlation;
 	}
 
+	public static double[][] useFunctionOnMatrixes(Function2p function, double[][] A, double[][] B) {
+		int firstDimSize = A.length;
+		int secondDimSize = A[0].length;
+
+		double[][] result = new double[firstDimSize][secondDimSize];
+		for (int i = 0; i < firstDimSize; i++) {
+			for (int j = 0; j < secondDimSize; j++) {
+				result[i][j] = function.f(A[i][j], B[i][j]);
+			}
+		}
+		return result;
+	}
+
+	public static double[][] eigenValues(double[][] matrix) {
+		int firstDimSize = matrix.length;
+		int secondDimSize = matrix[0].length;
+
+		double[][] result = new double[firstDimSize][secondDimSize];
+
+		// TODO
+
+		return result;
+	}
+
+	public static double[][] eye(int size) {
+		int firstDimSize = size;
+		int secondDimSize = size;
+
+		double[][] result = new double[firstDimSize][secondDimSize];
+		for (int i = 0; i < firstDimSize; i++) {
+			for (int j = 0; j < secondDimSize; j++) {
+				result[i][j] = 0;
+			}
+			result[i][i] = 1;
+		}
+		return result;
+	}
+
+	public static double[][] addMatrixes(double[][] A, double[][] B) {
+		int firstDimSize = A.length;
+		int secondDimSize = A[0].length;
+
+		double[][] result = new double[firstDimSize][secondDimSize];
+		for (int i = 0; i < firstDimSize; i++) {
+			for (int j = 0; j < secondDimSize; j++) {
+				result[i][j] = A[i][j] + B[i][j];
+			}
+		}
+		return result;
+	}
+
 	public static void replaceValue(double[][] matrix, double valueToPut, List<Double> valuesToReplace) {
 		for (int i = 0; i < matrix.length; i++) {
 			for (int j = 0; j < matrix[i].length; j++) {
@@ -39,6 +103,71 @@ public class MatrixTools {
 					matrix[i][j] = valueToPut;
 			}
 		}
+	}
+
+	public static double[] sumOfElements(double[][] matrix, boolean firstDim) {
+		if (firstDim)
+			return sumOfElementsFirstDim(matrix);
+		else
+			return sumOfElementsSecondDim(matrix);
+	}
+
+	private static double[] sumOfElementsFirstDim(double[][] matrix) {
+		int firstDimSize = matrix.length;
+		int secondDimSize = matrix[0].length;
+
+		double[] sum = new double[firstDimSize];
+
+		for (int i = 0; i < firstDimSize; i++) {
+			sum[i] = 0;
+			for (int j = 0; j < secondDimSize; j++) {
+				sum[i] += matrix[i][j];
+			}
+		}
+		return sum;
+	}
+
+	public static int[] sortDescendant(double[] vector) {
+		int[] result = new int[vector.length];
+
+		// Map <Integer, Double> map= new HashMap<>();
+		for (int i = 0; i < vector.length; i++) {
+			result[i] = i;
+		}
+		for (int i = 0; i < vector.length; i++) {
+			for (int j = i + 1; j < vector.length; j++) {
+				if (vector[i] < vector[j]) {
+					double temp = vector[i];
+					vector[i] = vector[j];
+					vector[j] = temp;
+					int tmp = result[i];
+					result[i] = result[j];
+					result[j] = tmp;
+				}
+			}
+		}
+
+		return result;
+	}
+
+	public static double[][] inverse(double[][] matrix) {
+		// TODO
+		return null;
+	}
+
+	private static double[] sumOfElementsSecondDim(double[][] matrix) {
+		int firstDimSize = matrix.length;
+		int secondDimSize = matrix[0].length;
+
+		double[] sum = new double[secondDimSize];
+
+		for (int i = 0; i < secondDimSize; i++) {
+			sum[i] = 0;
+			for (int j = 0; j < firstDimSize; j++) {
+				sum[i] += matrix[j][i];
+			}
+		}
+		return sum;
 	}
 
 	public static void replaceUndef(double[][] matrix, double valueToPut) {
@@ -60,6 +189,20 @@ public class MatrixTools {
 
 	}
 
+	public static double[][] transpose(double[][] matrix) {
+		int firstDimSize = matrix.length;
+		int secondDimSize = matrix[0].length;
+
+		double[][] transposed = new double[secondDimSize][firstDimSize];
+
+		for (int i = 0; i < firstDimSize; i++) {
+			for (int j = 0; j < secondDimSize; j++) {
+				transposed[j][i] = matrix[i][j];
+			}
+		}
+		return transposed;
+	}
+
 	public static double[] standardDeviation(double[][] matrix, boolean fistDim) {
 		if (fistDim)
 			return standardDeviationFirstDim(matrix);
@@ -68,29 +211,32 @@ public class MatrixTools {
 	}
 
 	private static double[] standardDeviationFirstDim(double[][] matrix) {
-		double[] standardDeviation = new double[matrix.length];
+		int firstDimSize = matrix.length;
+		int secondDimSize = matrix[0].length;
+
+		double[] standardDeviation = new double[firstDimSize];
 		double[] mean = mean(matrix, true);
 
-		for (int i = 0; i < matrix.length; i++) {
+		for (int i = 0; i < firstDimSize; i++) {
 			standardDeviation[i] = 0;
-			for (int j = 0; j < matrix[i].length; j++) {
-				standardDeviation[i] += 0;
+			for (int j = 0; j < secondDimSize; j++) {
+				standardDeviation[i] += Math.pow(matrix[i][j] - mean[i], 2) / (firstDimSize - 1);
 			}
 		}
 		return standardDeviation;
 	}
 
 	public static double[] standardDeviationSecondDim(double[][] matrix) {
-		int points = matrix.length;
-		int dims = matrix[0].length;
+		int firstDimSize = matrix.length;
+		int secondDimSize = matrix[0].length;
 
-		double[] standardDeviation = new double[dims];
+		double[] standardDeviation = new double[secondDimSize];
 		double[] mean = mean(matrix, false);
 
-		for (int i = 0; i < dims; i++) {
+		for (int i = 0; i < secondDimSize; i++) {
 			standardDeviation[i] = 0;
-			for (int j = 0; j < points; j++) {
-				standardDeviation[i] += Math.pow(matrix[j][i] - mean[i], 2) / (points - 1);
+			for (int j = 0; j < firstDimSize; j++) {
+				standardDeviation[i] += Math.pow(matrix[j][i] - mean[i], 2) / (firstDimSize - 1);
 			}
 			standardDeviation[i] = Math.sqrt(standardDeviation[i]);
 		}
@@ -133,5 +279,42 @@ public class MatrixTools {
 			}
 		}
 		return mean;
+	}
+
+	// TODO check later correct functionality for multi dim matrixes
+	public static double[][] bsxfun(Function2p functon, double[] A, double[] B) {
+		double[][] result = new double[A.length][B.length];
+
+		for (int i = 0; i < A.length; i++) {
+			for (int j = 0; j < B.length; j++) {
+				result[i][j] = functon.f(A[i], B[i]);
+			}
+		}
+
+		return result;
+	}
+
+	public static double min(double[][] matrix) {
+		double min = matrix[0][0];
+		for (int i = 0; i < matrix.length; i++) {
+			for (int j = 0; j < matrix[i].length; j++) {
+				if (min > matrix[i][j]) {
+					min = matrix[i][j];
+				}
+			}
+		}
+		return min;
+	}
+
+	public static double max(double[][] matrix) {
+		double max = matrix[0][0];
+		for (int i = 0; i < matrix.length; i++) {
+			for (int j = 0; j < matrix[i].length; j++) {
+				if (max < matrix[i][j]) {
+					max = matrix[i][j];
+				}
+			}
+		}
+		return max;
 	}
 }
