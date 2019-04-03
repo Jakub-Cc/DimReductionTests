@@ -300,6 +300,16 @@ public class MatrixTools {
 		return result;
 	}
 
+	public static double[][] zeroes(int rows, int columns) {
+		double[][] result = new double[rows][columns];
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < columns; j++) {
+				result[j][i] = 0;
+			}
+		}
+		return result;
+	}
+
 	public static void transformValues(double[][] matrix, Function function) {
 		for (int i = 0; i < matrix.length; i++) {
 			for (int j = 0; j < matrix[i].length; j++) {
@@ -342,6 +352,24 @@ public class MatrixTools {
 	public static double[][] multiplicateMatrixesWrap(double[][] A, double[][] B) {
 		RealMatrix realMatrix = MatrixUtils.createRealMatrix(A);
 		RealMatrix realMatrix2 = MatrixUtils.createRealMatrix(B);
+		realMatrix = realMatrix.multiply(realMatrix2);
+
+		return realMatrix.getData();
+	}
+
+	public static double[][] multiplicateMatrixesTransposeFirstWrap(double[][] A, double[][] B) {
+		RealMatrix realMatrix = MatrixUtils.createRealMatrix(A);
+		realMatrix = realMatrix.transpose();
+		RealMatrix realMatrix2 = MatrixUtils.createRealMatrix(B);
+		realMatrix = realMatrix.multiply(realMatrix2);
+
+		return realMatrix.getData();
+	}
+
+	public static double[][] multiplicateMatrixesTransposeSecondWrap(double[][] A, double[][] B) {
+		RealMatrix realMatrix = MatrixUtils.createRealMatrix(A);
+		RealMatrix realMatrix2 = MatrixUtils.createRealMatrix(B);
+		realMatrix2 = realMatrix2.transpose();
 		realMatrix = realMatrix.multiply(realMatrix2);
 
 		return realMatrix.getData();
@@ -571,6 +599,16 @@ public class MatrixTools {
 		else {
 			throw new IllegalArgumentException("Singleton dimnsion don't exist");
 		}
+	}
+
+	public static boolean anyElementNaN(double[][] matrix) {
+		for (int i = 0; i < matrix.length; i++) {
+			for (int j = 0; j < matrix[i].length; j++) {
+				if (Double.isNaN(matrix[i][j]))
+					return true;
+			}
+		}
+		return false;
 	}
 
 }
